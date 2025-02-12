@@ -385,7 +385,7 @@ if (version_compare(phpversion(), '7.1', '>=')) {
   for($i=1; $i<6; $i++){
 $field_n='vx_attachments';
 if($i>1){ $field_n.=$i; }
-  if(isset($fields[$field_n]['value'])){
+  if(isset($fields[$field_n]['value'])){ 
     $files=$this->verify_files($fields[$field_n]['value'],$files);
     unset($fields[$field_n]);  
   }
@@ -495,7 +495,7 @@ foreach($fields as $k=>$v){
     }
     if( in_array($type, array('files','tags') )){
      $related[$type]=$v['value'];   
-    }else if( in_array($type, array('fileupload') )){
+    }else if( in_array($type, array('fileupload','imageupload') )){ //added imageupload @ sep-24 , not tested yet
 //this field is not supported in zoho API  
 if(!empty($v['value'])){
     $upload=wp_upload_dir();
@@ -536,7 +536,7 @@ if(!empty($file_arr['data'][0]['details']['id'])){
      $post['trigger']=explode(',',$v['value']); 
     }else{
         if($k == 'GCLID'){ $k='$gclid'; }
-        if($k == 'Pipeline'){ $v['value']=array('id'=>$v['value']); }
+        //if($k == 'Pipeline'){ $v['value']=array('id'=>$v['value']); }  disabled it @sep-24 , zoho accepts simple text not ID
     $post[$k]=$v['value']; }
 }
 if(!empty($tags)){
@@ -920,8 +920,7 @@ $access_token=!empty($this->info['access_token']) ? $this->info['access_token'] 
 $header['Authorization']='Zoho-oauthtoken ' .$access_token; 
 if(!is_array($body)){
 $header['Content-Type']='application/json'; //required for add_tags feature of zoho crm
-}
-//$header[]='Authorization: Zoho-oauthtoken ' .$access_token; 
+} 
 }
 
  if($method !='get' && !empty($body) && is_array($body)){

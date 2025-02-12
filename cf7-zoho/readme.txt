@@ -2,9 +2,9 @@
 Contributors: crmperks, sbazzi, asif876
 Tags: wordpress zoho crm plugin, contact form 7 zoho crm, WPForms zoho, Formidable zoho crm, Ninja Forms zoho crm
 Requires at least: 3.8
-Tested up to: 6.6
-Stable tag: 1.2.9
-Version: 1.2.9
+Tested up to: 6.7
+Stable tag: 1.3.0
+Version: 1.3.0
 Requires PHP: 5.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -159,6 +159,9 @@ You can easily inegrate Contact Form 7 to Zoho CRM. Simply select zoho object th
 
 == Changelog ==
 
+= 1.3.0 =
+* fixed "image upload field" issue.
+* fixed "pipeline field in deal module" issue.
 
 = 1.2.9 =
 * fixed "empty file issue".
