@@ -93,7 +93,7 @@ echo '<option value="'.$k.'" '.$sel.'>'.$v.'</option>';
       $ret=$link.'&'.$this->id."_tab_action=get_token&vx_action=redirect&id=".$id."&vx_nonce=".$nonce;
 $dc=!empty($info['dc']) ? $info['dc'] : 'com';
 $ret_dc=$ret.'&dc='.$dc;
-$scope='ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,ZohoCRM.users.Read,ZohoCRM.coql.READ';
+$scope='ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,ZohoCRM.users.Read,ZohoCRM.coql.READ,ZohoCRM.files.CREATE,ZohoCRM.files.READ';
 if(!empty($info['type'])){
     if($info['type'] == 'bigin'){
 $scope='ZohoBigin.modules.ALL,ZohoBigin.settings.ALL,ZohoBigin.users.Read';

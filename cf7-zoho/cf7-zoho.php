@@ -2,7 +2,7 @@
 /**
 * Plugin Name: WP Contact Form Zoho
 * Description: Integrates Contact Form 7, <a href="https://wordpress.org/plugins/contact-form-entries/">Contact Form Entries Plugin</a> and many other forms with Zoho allowing form submissions to be automatically sent to your Zoho account 
-* Version: 1.3.0
+* Version: 1.3.1
 * Requires at least: 3.8
 * Author URI: https://www.crmperks.com
 * Plugin URI: https://www.crmperks.com/plugins/contact-form-plugins/contact-form-zoho-plugin/
@@ -24,7 +24,7 @@ class vxcf_zoho {
   public  $crm_name = "zoho";
   public  $id = "vxcf_zoho";
   public  $domain = "vxcf-zoho";
-  public  $version = "1.3.0";
+  public  $version = "1.3.1";
   public  $update_id = "6000001";
   public  $min_cf_version = "1.0";
   public $type = "vxcf_zoho";
@@ -968,7 +968,7 @@ return $result;
       $value=$value['value'];   
      }
      if(!is_array($value)){
-          $value=maybe_unserialize($value);
+         // $value=maybe_unserialize($value);
      }
   
   }else if(isset($_REQUEST[$field_id])){
