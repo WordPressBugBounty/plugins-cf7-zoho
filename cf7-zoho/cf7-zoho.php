@@ -2,7 +2,7 @@
 /**
 * Plugin Name: WP Contact Form Zoho
 * Description: Integrates Contact Form 7, <a href="https://wordpress.org/plugins/contact-form-entries/">Contact Form Entries Plugin</a> and many other forms with Zoho allowing form submissions to be automatically sent to your Zoho account 
-* Version: 1.3.1
+* Version: 1.3.2
 * Requires at least: 3.8
 * Author URI: https://www.crmperks.com
 * Plugin URI: https://www.crmperks.com/plugins/contact-form-plugins/contact-form-zoho-plugin/
@@ -24,7 +24,7 @@ class vxcf_zoho {
   public  $crm_name = "zoho";
   public  $id = "vxcf_zoho";
   public  $domain = "vxcf-zoho";
-  public  $version = "1.3.1";
+  public  $version = "1.3.2";
   public  $update_id = "6000001";
   public  $min_cf_version = "1.0";
   public $type = "vxcf_zoho";
@@ -115,18 +115,7 @@ require_once(self::$path . "includes/plugin-pages.php");
   add_action('init', array($this,'init'));
        //loading translations
 //load_plugin_textdomain('contact-form-zoho-crm', FALSE,  $this->plugin_dir_name(). '/languages/' );
-  
-  self::$db_version=get_option($this->type."_version");
-  if(self::$db_version != $this->version && current_user_can( 'manage_options' )){
-  $data=$this->get_data_object();
-  $data->update_table();
-  update_option($this->type."_version", $this->version);
-  //add post permissions
-  require_once(self::$path . "includes/install.php"); 
-  $install=new vxcf_zoho_install();
-  $install->create_roles();   
-
-  }
+  $this->maybe_install(true);
 }
   
   }
@@ -146,6 +135,31 @@ if($start_instance){
 self::$plugin->instance();
 }
 } }
+  /**
+  * create tables and roles
+  * 
+  */
+public function maybe_install($version_check=false){
+    
+  if(current_user_can( 'manage_options' )){
+  self::$db_version=get_option($this->type."_version");
+     $do_install=false;
+      if($version_check == false){
+        $do_install=true;  
+      }else if(self::$db_version != $this->version){
+        $do_install=true;   
+      }
+  if($do_install){
+  $data=$this->get_data_object();
+  $data->update_table();
+  update_option($this->type."_version", $this->version);
+  //add post permissions
+  require_once(self::$path . "includes/install.php"); 
+  $install=new vxcf_zoho_install();
+  $install->create_roles();   
+  }
+  } 
+}
 public function form_submitted($form){ 
 
     //entries plugin exists , do not use this hook
@@ -517,28 +531,6 @@ $this->push($entry,$form,'',false);
   echo '</p></div>';
   } 
 
-
-  /**
-  * create tables and roles
-  * 
-  */
-  public function install(){
-      
-  if(current_user_can( 'manage_options' )){
-  self::$db_version=get_option($this->type."_version");
-  if(self::$db_version != $this->version){
-  $data=$this->get_data_object();
-  $data->update_table();
-  update_option($this->type."_version", $this->version);
-  //add post permissions
-  require_once(self::$path . "includes/install.php"); 
-  $install=new vxcf_zoho_install();
-  $install->create_roles();   
-
-  }
-
-  } 
-  }
 /**
 * Contact Form status
 * 
@@ -968,7 +960,7 @@ return $result;
       $value=$value['value'];   
      }
      if(!is_array($value)){
-         // $value=maybe_unserialize($value);
+        //  $value=maybe_unserialize($value);
      }
   
   }else if(isset($_REQUEST[$field_id])){
@@ -980,7 +972,7 @@ return $result;
 if( $type == 'file' && !empty($value)){
     if(class_exists('vxcf_form')){
 $upload=vxcf_form::get_upload_dir(); 
-$temp_files=array();
+$temp_files=array(); $value=maybe_unserialize($value); // mfile field uses serialized 
       if(!is_array($value)){ $value=array($value); }
 foreach($value as $f){
      if(filter_var($f,FILTER_VALIDATE_URL) === false){
@@ -992,7 +984,7 @@ foreach($value as $f){
   $temp_files[]=$f;   
 }  $value=$temp_files;   
     }
-$value=trim(implode(' ',$value));
+$value=trim(implode(',',$value)); // api accepts comma
  }else if( is_array($value) && count($value) == 1 ){
    $value=trim(implode(' ',$value));  
  }
@@ -1279,6 +1271,7 @@ if(!current_user_can($this->id."_send_to_crm")){return; }
   */
   public function activate(){ 
 $this->plugin_api(true);
+$this->maybe_install();
 do_action('plugin_status_'.$this->type,'activate');  
   }
     /**
@@ -1859,7 +1852,7 @@ $entry_note=$this->process_tags($entry,$data['note_val']);
   }
    
   }
-///var_dump($temp); die('---------');
+//var_dump($temp); die('---------');
 $no_filter=true;    
 
   //not submitted by admin

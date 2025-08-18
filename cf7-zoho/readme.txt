@@ -3,8 +3,8 @@ Contributors: crmperks, sbazzi, asif876
 Tags: wordpress zoho crm plugin, contact form 7 zoho crm, WPForms zoho, Formidable zoho crm, Ninja Forms zoho crm
 Requires at least: 3.8
 Tested up to: 6.8
-Stable tag: 1.3.1
-Version: 1.3.1
+Stable tag: 1.3.2
+Version: 1.3.2
 Requires PHP: 5.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -158,6 +158,9 @@ You can easily inegrate Contact Form 7 to Zoho CRM. Simply select zoho object th
 * You can manually send any Contact form 7 entry to Zoho Bigin by clicking "send to Zoho" button.
 
 == Changelog ==
+
+= 1.3.2 =
+* fixed "mfile upload field" issue.
 
 = 1.3.1 =
 * fixed "image upload field Oauth scope" issue.
