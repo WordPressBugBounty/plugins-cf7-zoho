@@ -513,12 +513,12 @@ if(!empty($file_arr['data'][0]['details']['id'])){
         if(is_string($v['value'])){
      $post[$k]=date('Y-m-d',strtotime(str_replace('/', '-',$v['value'])));
         }  
-    }else if( in_array($type,array('multiselectpicklist')) ){
+    }else if( in_array($type,array('multiselectpicklist')) ){ 
           if(is_string($v['value'])){ $v['value']=array($v['value']); }
        if(!empty($search_response[0][$k]) && is_array($search_response[0][$k])){
          $v['value']=array_merge($v['value'],$search_response[0][$k]);
-         $v['value']=array_unique($v['value']);  
-       }   
+         $v['value']=array_unique($v['value']); 
+       } 
       $post[$k]=$v['value'];  
     }else if($type == 'multiselectlookup'){
      $multi_lookup[$k]=$v['value'];   
@@ -601,7 +601,7 @@ if(!empty($meta['assign_rule'])){
 if(!empty($method)){
 if(empty($path)){  $path=$module; }
 $arr=$this->post_crm( $path, $method,json_encode($post));
-//var_dump($post,$arr); die();
+//var_dump($post,$fields,$arr); die();
 }
 if(!empty($arr['data'])){
     if(isset($arr['data'][0]['status']) && $arr['data'][0]['status'] == 'success' && isset($arr['data'][0]['details']['id'])){
@@ -948,8 +948,9 @@ $args=array(
   ); //var_dump($args,$path);
 $response = wp_remote_request( $path , $args); 
 $body = wp_remote_retrieve_body($response);
-//var_dump($body); die();
-
+if($method !='get'){
+//var_dump($path,$body,$header); die();
+}
   if(is_wp_error($response)) { 
   $error = $response->get_error_message();
   return array('error'=>$error);

@@ -2,7 +2,7 @@
 /**
 * Plugin Name: WP Contact Form Zoho
 * Description: Integrates Contact Form 7, <a href="https://wordpress.org/plugins/contact-form-entries/">Contact Form Entries Plugin</a> and many other forms with Zoho allowing form submissions to be automatically sent to your Zoho account 
-* Version: 1.3.2
+* Version: 1.3.3
 * Requires at least: 3.8
 * Author URI: https://www.crmperks.com
 * Plugin URI: https://www.crmperks.com/plugins/contact-form-plugins/contact-form-zoho-plugin/
@@ -24,7 +24,7 @@ class vxcf_zoho {
   public  $crm_name = "zoho";
   public  $id = "vxcf_zoho";
   public  $domain = "vxcf-zoho";
-  public  $version = "1.3.2";
+  public  $version = "1.3.3";
   public  $update_id = "6000001";
   public  $min_cf_version = "1.0";
   public $type = "vxcf_zoho";
@@ -102,8 +102,9 @@ require_once(self::$path . "includes/plugin-pages.php");
  add_action('vx_contact_created', array($this, 'entry_created_contacts'),10,3);
  add_action('vx_callcenter_entry_created', array($this, 'entry_created_callcenter'),10,3);
  
- add_filter('wpcf7_before_send_mail', array($this, 'create_entry_cf'),99);
+ //add_filter('wpcf7_before_send_mail', array($this, 'create_entry_cf'),99);
    //formidable
+  add_action('wpcf7_mail_sent', array($this, 'create_entry_cf'), 99);
   add_action('frm_after_create_entry', array($this, 'create_entry_fd'), 99, 2);
   add_action('ninja_forms_after_submission', array($this, 'create_entry_na'),99);
   add_action( 'wpforms_process_entry_save',array(&$this,'create_entry_wp'), 99, 4 );
@@ -238,18 +239,17 @@ if(is_array($post_data)){
   $val=$uploaded_files[$name];
    }
 
-   if( !empty($val) && isset($v['basetype']) && $v['basetype'] == 'mfile' && function_exists('dnd_get_upload_dir') ){
+  if( !empty($val) && isset($v['basetype']) && $v['basetype'] == 'mfile' && function_exists('dnd_get_upload_dir') ){
       $dir=dnd_get_upload_dir(); 
      $f_arr=array();
       foreach($val as $file){
-     $file_name=explode('/',$file);
+     $file_name=explode('/',$file); 
      if(count($file_name)>1){
-      $f_arr[]=$dir['upload_url'].'/'.$file_name[1];    
+      $f_arr[]=$dir['upload_url'].'/'.end($file_name);    
      }
-      }
-        
+      }   
    $val=$f_arr;   
-   }  
+   }   
     if(!isset($uploaded_files[$name])){
      $val=wp_unslash($val);   
     }        
@@ -388,6 +388,9 @@ if(is_array($fields)){
       $name=$v['name'];
      if(isset($detail[$name])){
          $val=$detail[$name];
+     if(is_serialized($val)){
+           $val=unserialize($val, array('allowed_classes' => false));
+         }
      if($v['type'] == 'file'){
           $val= wp_get_attachment_url($val) ;
              $base_url=get_site_url();
