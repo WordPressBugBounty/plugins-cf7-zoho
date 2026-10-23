@@ -2,7 +2,7 @@
 Contributors: crmperks, sbazzi, asif876
 Tags: wordpress zoho crm plugin, contact form 7 zoho crm, WPForms zoho, Formidable zoho crm, Ninja Forms zoho crm
 Requires at least: 3.8
-Tested up to: 6.9
+Tested up to: 7.1
 Stable tag: 1.3.3
 Version: 1.3.3
 Requires PHP: 5.3
